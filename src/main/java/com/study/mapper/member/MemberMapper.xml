@@ -5,9 +5,23 @@
   
 <mapper namespace="com.study.mapper.member.MemberMapper">
 
+	<select id="selectByNickName" resultType="com.study.domain.member.MemberDto">
+	SELECT 
+		id,
+		nickName,
+		password,
+		email,
+		inserted
+	FROM
+		Member
+	WHERE
+		nickName = #{nickName}
+	</select>
+
 	<select id="selectByEmail" resultType="com.study.domain.member.MemberDto">
 	SELECT 
 		id,
+		nickName,
 		password,
 		email,
 		inserted
@@ -35,6 +49,7 @@
 	<select id="selectById" resultType="com.study.domain.member.MemberDto">
 	SELECT 
 		id,
+		nickName,
 		password,
 		email,
 		inserted
@@ -48,6 +63,7 @@
 	<select id="selectAll" resultType="com.study.domain.member.MemberDto">
 	SELECT 
 		id,
+		nickName,
 		'숨김' password,
 		email,
 		inserted
@@ -58,7 +74,7 @@
 	</select>
 
 	<insert id="insert">
-	INSERT INTO Member (id, password, email)
-	VALUES (#{id}, #{password}, #{email})
+	INSERT INTO Member (id, nickName, password, email)
+	VALUES (#{id}, #{nickName}, #{password}, #{email})
 	</insert>
 </mapper>
