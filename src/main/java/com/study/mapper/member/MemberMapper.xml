@@ -39,7 +39,9 @@
 	<update id="update">
 	UPDATE Member
 	SET
+		<if test="password != null">
 		password = #{password},
+		</if>
 		nickName = #{nickName},
 		email = #{email}
 	WHERE

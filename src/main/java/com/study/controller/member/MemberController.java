@@ -3,7 +3,10 @@ package com.study.controller.member;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,14 @@ public class MemberController {
 
 	@Autowired
 	private MemberService service;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@GetMapping("login")
+	public void login() {
+
+	}
 
 	@GetMapping("existNickName/{nickName}")
 	@ResponseBody
@@ -111,7 +122,8 @@ public class MemberController {
 		MemberDto oldmember = service.getById(member.getId());
 
 		rttr.addAttribute("id", member.getId());
-		if (oldmember.getPassword().equals(oldPassword)) {
+		boolean passwordMatch = passwordEncoder.matches(oldPassword, oldmember.getPassword());
+		if (passwordMatch) {
 			// 기존 암호가 맞으면 회원 정보 수정
 			int cnt = service.modify(member);
 
@@ -130,13 +142,17 @@ public class MemberController {
 	}
 
 	@PostMapping("remove")
-	public String remove(String id, String oldPassword, RedirectAttributes rttr) {
+	public String remove(String id, String oldPassword, RedirectAttributes rttr, HttpServletRequest request)
+			throws Exception {
 		MemberDto oldmember = service.getById(id);
 
-		if (oldmember.getPassword().equals(oldPassword)) {
-			int cnt = service.remove(id);
+		boolean passwordMatch = passwordEncoder.matches(oldPassword, oldmember.getPassword());
+
+		if (passwordMatch) {
+			service.remove(id);
 
 			rttr.addFlashAttribute("message", "회원 탈퇴하였습니다.");
+			request.logout();
 
 			return "redirect:/board/list";
 

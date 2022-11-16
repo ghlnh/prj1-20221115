@@ -8,13 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
 	@RequestMapping("")
-	@ResponseBody
 	public String home() {
-		return "welcome home!";
+		return "redirect:/board/list";
 	}
 	
-	@RequestMapping("index")
-	public void index() {
-		
-	}
 }
