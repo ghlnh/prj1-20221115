@@ -10,6 +10,7 @@ public class MemberDto {
 	private String nickName;
 	private String email;
 	private String password;
+
 	
 	private LocalDateTime inserted;
 }
